@@ -19,16 +19,17 @@ var counter = 0;
 var config = require('../config/watcherConfig');
 var hostURL = config.hostURL;
 var stopIDs = config.stopIDs;
+var apiKey = config.apiKey;
 
 function MTA_Subway_SIRI_Server_data_watcher (_sol_bot, _log) {
     sol_bot = _sol_bot;
     log = _log;
 
-    var vehicleMonitoringURL_json = hostURL + 'vehicle-monitoring.json',
-        vehicleMonitoringWithCallsURL_json = vehicleMonitoringURL_json + '?VehicleMonitoringDetailLevel=calls',
+    var vehicleMonitoringURL_json = hostURL + 'vehicle-monitoring.json' + '?key=' + apiKey,
+        vehicleMonitoringWithCallsURL_json = vehicleMonitoringURL_json + '&VehicleMonitoringDetailLevel=calls',
 
-        vehicleMonitoringURL_xml = hostURL + '/vehicle-monitoring.xml',
-        vehicleMonitoringWithCallsURL_xml = vehicleMonitoringURL_xml + '?VehicleMonitoringDetailLevel=calls';
+        vehicleMonitoringURL_xml = hostURL + '/vehicle-monitoring.xml' + '?key=' + apiKey,
+        vehicleMonitoringWithCallsURL_xml = vehicleMonitoringURL_xml + '&VehicleMonitoringDetailLevel=calls';
 
     watcherFactory(function () { return vehicleMonitoringURL_json; }, 'json', 500);
     watcherFactory(function () { return vehicleMonitoringWithCallsURL_json; }, 'json', 500);
@@ -44,7 +45,7 @@ function MTA_Subway_SIRI_Server_data_watcher (_sol_bot, _log) {
 function getRandomStopMonitoringURL (dataFormat) {
     return hostURL + '/stop-monitoring.' + dataFormat + '?' + 
             'MonitoringRef=' + stopIDs[Math.floor(stopIDs.length * Math.random())] +
-            ((Math.random() > 0.5) ?  '&StopMonitoringDetailLevel=calls' : '');
+            ((Math.random() > 0.5) ?  '&StopMonitoringDetailLevel=calls' : '') + '&key=' + apiKey;
 }
 
 
